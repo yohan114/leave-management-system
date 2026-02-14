@@ -1,141 +1,193 @@
-# 🚀 Welcome to Z.ai Code Scaffold
+# Leave Management System
 
-A modern, production-ready web application scaffold powered by cutting-edge technologies, designed to accelerate your development with [Z.ai](https://chat.z.ai)'s AI-powered coding assistance.
+A comprehensive, locally-hosted leave management system for tracking and managing employee leave requests. Built with Next.js 16, TypeScript, Prisma, and SQLite.
 
-## ✨ Technology Stack
+![Leave Management System](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
+![Prisma](https://img.shields.io/badge/Prisma-6-2D3748?style=flat-square&logo=prisma)
+![SQLite](https://img.shields.io/badge/SQLite-Database-003B57?style=flat-square&logo=sqlite)
 
-This scaffold provides a robust foundation built with:
+## ✨ Features
 
-### 🎯 Core Framework
-- **⚡ Next.js 16** - The React framework for production with App Router
-- **📘 TypeScript 5** - Type-safe JavaScript for better developer experience
-- **🎨 Tailwind CSS 4** - Utility-first CSS framework for rapid UI development
+### User Management
+- **Three User Roles**: Admin, Manager, Employee
+- **Secure Authentication**: NextAuth.js with credentials provider
+- **Role-based Access Control**: Different permissions for each role
 
-### 🧩 UI Components & Styling
-- **🧩 shadcn/ui** - High-quality, accessible components built on Radix UI
-- **🎯 Lucide React** - Beautiful & consistent icon library
-- **🌈 Framer Motion** - Production-ready motion library for React
-- **🎨 Next Themes** - Perfect dark mode in 2 lines of code
+### Leave Types
+- Annual Leave
+- Sick Leave
+- Casual Leave
+- Maternity/Paternity Leave
+- Unpaid Leave
+- Custom leave types (configurable by admin)
 
-### 📋 Forms & Validation
-- **🎣 React Hook Form** - Performant forms with easy validation
-- **✅ Zod** - TypeScript-first schema validation
+### Employee Features
+- Submit leave requests with date range and reason
+- View leave history
+- Check leave balance
+- Cancel pending requests
+- Half-day leave support
 
-### 🔄 State Management & Data Fetching
-- **🐻 Zustand** - Simple, scalable state management
-- **🔄 TanStack Query** - Powerful data synchronization for React
-- **🌐 Fetch** - Promise-based HTTP request
+### Manager Features
+- View team members' leave requests
+- Approve or reject requests with comments
+- View team calendar
+- Check team availability
 
-### 🗄️ Database & Backend
-- **🗄️ Prisma** - Next-generation TypeScript ORM
-- **🔐 NextAuth.js** - Complete open-source authentication solution
+### Admin Features
+- Manage all users
+- Create and edit departments
+- Configure leave types
+- View reports and analytics
+- Override approvals/rejections
 
-### 🎨 Advanced UI Features
-- **📊 TanStack Table** - Headless UI for building tables and datagrids
-- **🖱️ DND Kit** - Modern drag and drop toolkit for React
-- **📊 Recharts** - Redefined chart library built with React and D3
-- **🖼️ Sharp** - High performance image processing
+### Additional Features
+- 📅 Visual team calendar with holidays
+- 🔔 In-app notifications
+- 📊 Leave balance tracking with visual indicators
+- 📱 Responsive design (mobile-friendly)
+- 🎨 Color-coded status indicators
 
-### 🌍 Internationalization & Utilities
-- **🌍 Next Intl** - Internationalization library for Next.js
-- **📅 Date-fns** - Modern JavaScript date utility library
-- **🪝 ReactUse** - Collection of essential React hooks for modern development
+## 🚀 Getting Started
 
-## 🎯 Why This Scaffold?
+### Prerequisites
+- Node.js 18+ or Bun
+- npm, yarn, or bun
 
-- **🏎️ Fast Development** - Pre-configured tooling and best practices
-- **🎨 Beautiful UI** - Complete shadcn/ui component library with advanced interactions
-- **🔒 Type Safety** - Full TypeScript configuration with Zod validation
-- **📱 Responsive** - Mobile-first design principles with smooth animations
-- **🗄️ Database Ready** - Prisma ORM configured for rapid backend development
-- **🔐 Auth Included** - NextAuth.js for secure authentication flows
-- **📊 Data Visualization** - Charts, tables, and drag-and-drop functionality
-- **🌍 i18n Ready** - Multi-language support with Next Intl
-- **🚀 Production Ready** - Optimized build and deployment settings
-- **🤖 AI-Friendly** - Structured codebase perfect for AI assistance
+### Installation
 
-## 🚀 Quick Start
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/leave-management-system.git
+   cd leave-management-system
+   ```
 
-```bash
-# Install dependencies
-bun install
+2. **Install dependencies**
+   ```bash
+   bun install
+   # or
+   npm install
+   ```
 
-# Start development server
-bun run dev
+3. **Set up environment variables**
+   
+   Create a `.env` file in the root directory:
+   ```env
+   DATABASE_URL=file:./db/custom.db
+   NEXTAUTH_SECRET=your-super-secret-key-change-in-production
+   NEXTAUTH_URL=http://localhost:3000
+   ```
 
-# Build for production
-bun run build
+4. **Initialize the database**
+   ```bash
+   bun run db:push
+   bun prisma/seed.ts
+   # or
+   npx prisma db push
+   npx ts-node prisma/seed.ts
+   ```
 
-# Start production server
-bun start
-```
+5. **Start the development server**
+   ```bash
+   bun run dev
+   # or
+   npm run dev
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) to see your application running.
+6. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-## 🤖 Powered by Z.ai
+## 🔑 Test Accounts
 
-This scaffold is optimized for use with [Z.ai](https://chat.z.ai) - your AI assistant for:
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@company.com | password123 |
+| Manager | manager.eng@company.com | password123 |
+| Employee | employee1@company.com | password123 |
 
-- **💻 Code Generation** - Generate components, pages, and features instantly
-- **🎨 UI Development** - Create beautiful interfaces with AI assistance  
-- **🔧 Bug Fixing** - Identify and resolve issues with intelligent suggestions
-- **📝 Documentation** - Auto-generate comprehensive documentation
-- **🚀 Optimization** - Performance improvements and best practices
+## 🛠️ Tech Stack
 
-Ready to build something amazing? Start chatting with Z.ai at [chat.z.ai](https://chat.z.ai) and experience the future of AI-powered development!
+- **Framework**: Next.js 16 with App Router
+- **Language**: TypeScript 5
+- **Database**: SQLite with Prisma ORM
+- **Authentication**: NextAuth.js v4
+- **Styling**: Tailwind CSS 4
+- **UI Components**: shadcn/ui
+- **Icons**: Lucide React
+- **State Management**: React Query
+- **Date Handling**: date-fns
 
 ## 📁 Project Structure
 
 ```
-src/
-├── app/                 # Next.js App Router pages
-├── components/          # Reusable React components
-│   └── ui/             # shadcn/ui components
-├── hooks/              # Custom React hooks
-└── lib/                # Utility functions and configurations
+├── prisma/
+│   ├── schema.prisma    # Database schema
+│   └── seed.ts          # Seed data script
+├── src/
+│   ├── app/
+│   │   ├── api/         # API routes
+│   │   │   ├── auth/    # Authentication endpoints
+│   │   │   ├── users/   # User management
+│   │   │   ├── leave-requests/
+│   │   │   ├── leave-balances/
+│   │   │   ├── leave-types/
+│   │   │   ├── departments/
+│   │   │   ├── notifications/
+│   │   │   ├── reports/
+│   │   │   └── holidays/
+│   │   ├── page.tsx     # Main application
+│   │   └── layout.tsx   # Root layout
+│   ├── components/ui/   # UI components (shadcn/ui)
+│   ├── lib/
+│   │   ├── auth.ts      # NextAuth configuration
+│   │   └── db.ts        # Prisma client
+│   └── hooks/           # React hooks
+├── .env                 # Environment variables
+└── package.json
 ```
 
-## 🎨 Available Features & Components
+## 📊 Database Schema
 
-This scaffold includes a comprehensive set of modern web development tools:
+- **User**: Employee information with role and department
+- **Department**: Organizational departments
+- **LeaveType**: Leave categories with allocation rules
+- **LeaveBalance**: Leave balance tracking per user/year/type
+- **LeaveRequest**: Leave requests with approval workflow
+- **Notification**: In-app notifications
+- **Holiday**: Company holidays
 
-### 🧩 UI Components (shadcn/ui)
-- **Layout**: Card, Separator, Aspect Ratio, Resizable Panels
-- **Forms**: Input, Textarea, Select, Checkbox, Radio Group, Switch
-- **Feedback**: Alert, Toast (Sonner), Progress, Skeleton
-- **Navigation**: Breadcrumb, Menubar, Navigation Menu, Pagination
-- **Overlay**: Dialog, Sheet, Popover, Tooltip, Hover Card
-- **Data Display**: Badge, Avatar, Calendar
+## 🔒 Security Features
 
-### 📊 Advanced Data Features
-- **Tables**: Powerful data tables with sorting, filtering, pagination (TanStack Table)
-- **Charts**: Beautiful visualizations with Recharts
-- **Forms**: Type-safe forms with React Hook Form + Zod validation
+- Password hashing with bcrypt
+- SQL injection prevention (Prisma)
+- XSS protection
+- Role-based access control
+- Session-based authentication
 
-### 🎨 Interactive Features
-- **Animations**: Smooth micro-interactions with Framer Motion
-- **Drag & Drop**: Modern drag-and-drop functionality with DND Kit
-- **Theme Switching**: Built-in dark/light mode support
+## 📝 Scripts
 
-### 🔐 Backend Integration
-- **Authentication**: Ready-to-use auth flows with NextAuth.js
-- **Database**: Type-safe database operations with Prisma
-- **API Client**: HTTP requests with Fetch + TanStack Query
-- **State Management**: Simple and scalable with Zustand
+```bash
+bun run dev        # Start development server
+bun run build      # Build for production
+bun run lint       # Run ESLint
+bun run db:push    # Push schema changes to database
+bun run db:generate # Generate Prisma client
+```
 
-### 🌍 Production Features
-- **Internationalization**: Multi-language support with Next Intl
-- **Image Optimization**: Automatic image processing with Sharp
-- **Type Safety**: End-to-end TypeScript with Zod validation
-- **Essential Hooks**: 100+ useful React hooks with ReactUse for common patterns
+## 🤝 Contributing
 
-## 🤝 Get Started with Z.ai
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-1. **Clone this scaffold** to jumpstart your project
-2. **Visit [chat.z.ai](https://chat.z.ai)** to access your AI coding assistant
-3. **Start building** with intelligent code generation and assistance
-4. **Deploy with confidence** using the production-ready setup
+## 📄 License
 
----
+This project is licensed under the MIT License.
 
-Built with ❤️ for the developer community. Supercharged by [Z.ai](https://chat.z.ai) 🚀
+## 🙏 Acknowledgments
+
+- [shadcn/ui](https://ui.shadcn.com/) for beautiful UI components
+- [Prisma](https://www.prisma.io/) for the amazing ORM
+- [Next.js](https://nextjs.org/) for the React framework

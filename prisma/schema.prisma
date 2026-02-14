@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,20 +10,161 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+// User roles
+enum Role {
+  EMPLOYEE
+  MANAGER
+  ADMIN
 }
 
-model Post {
-  id        String   @id @default(cuid())
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+// Leave request status
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+// Department model
+model Department {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  users       User[]        @relation("DepartmentMembers")
+  leaveRequests LeaveRequest[]
+}
+
+// User model
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  password     String
+  name         String
+  role         Role     @default(EMPLOYEE)
+  departmentId String?
+  managerId    String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  department   Department?  @relation("DepartmentMembers", fields: [departmentId], references: [id])
+  manager      User?        @relation("ManagerTeam", fields: [managerId], references: [id])
+  teamMembers  User[]       @relation("ManagerTeam")
+  
+  leaveBalances  LeaveBalance[]
+  leaveRequests  LeaveRequest[]
+  approvedRequests LeaveRequest[] @relation("ApprovedBy")
+  notifications  Notification[]
+  
+  @@index([departmentId])
+  @@index([managerId])
+}
+
+// Leave Type model
+model LeaveType {
+  id           String   @id @default(cuid())
+  name         String   @unique
+  description  String?
+  defaultDays  Float    @default(0)
+  color        String   @default("#6B7280")
+  isActive     Boolean  @default(true)
+  carryForward Boolean  @default(false)
+  maxCarryDays Float    @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  leaveBalances LeaveBalance[]
+  leaveRequests LeaveRequest[]
+}
+
+// Leave Balance model
+model LeaveBalance {
+  id           String   @id @default(cuid())
+  userId       String
+  leaveTypeId  String
+  year         Int
+  totalDays    Float    @default(0)
+  usedDays     Float    @default(0)
+  pendingDays  Float    @default(0)
+  carriedDays  Float    @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  leaveType    LeaveType @relation(fields: [leaveTypeId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, leaveTypeId, year])
+  @@index([userId])
+  @@index([leaveTypeId])
+}
+
+// Leave Request model
+model LeaveRequest {
+  id              String      @id @default(cuid())
+  userId          String
+  leaveTypeId     String
+  departmentId    String?
+  startDate       DateTime
+  endDate         DateTime
+  totalDays       Float
+  halfDay         Boolean     @default(false)
+  reason          String
+  status          LeaveStatus @default(PENDING)
+  rejectionReason String?
+  appliedAt       DateTime    @default(now())
+  approvedAt      DateTime?
+  approvedBy      String?
+  cancelledAt     DateTime?
+  
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  leaveType       LeaveType   @relation(fields: [leaveTypeId], references: [id])
+  department      Department? @relation(fields: [departmentId], references: [id])
+  approver        User?       @relation("ApprovedBy", fields: [approvedBy], references: [id])
+  
+  @@index([userId])
+  @@index([status])
+  @@index([departmentId])
+  @@index([startDate])
+}
+
+// Notification model
+model Notification {
+  id          String   @id @default(cuid())
+  userId      String
+  title       String
+  message     String
+  type        String   // "leave_request", "approval", "rejection", "reminder", "balance_alert"
+  isRead      Boolean  @default(false)
+  link        String?
+  createdAt   DateTime @default(now())
+  
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([isRead])
+}
+
+// Holiday model (for calendar)
+model Holiday {
+  id          String   @id @default(cuid())
+  name        String
+  date        DateTime
+  isRecurring Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([date])
+}
+
+// System settings
+model Setting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

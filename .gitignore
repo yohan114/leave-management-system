@@ -49,3 +49,8 @@ prompt
 server.log
 # Skills directory
 /skills/
+
+# Database files
+db/
+*.db
+*.db-journal
