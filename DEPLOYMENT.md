@@ -176,6 +176,15 @@ server {
     listen 80;
     server_name your-domain.com www.your-domain.com;
 
+    # Logging
+    access_log /var/log/nginx/leave-management.access.log;
+    error_log /var/log/nginx/leave-management.error.log;
+
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+
     location / {
         proxy_pass http://localhost:3000;
         proxy_http_version 1.1;
@@ -186,11 +195,28 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_cache_bypass $http_upgrade;
-        proxy_read_timeout 300s;
-        proxy_connect_timeout 75s;
+        
+        # Timeouts
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
     }
+
+    # Serve static files directly (optional optimization)
+    location /_next/static {
+        alias /var/www/leave-management-system/.next/static;
+        expires 365d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # Gzip compression
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+    gzip_min_length 1000;
 }
 ```
+
+**Important**: Replace `your-domain.com` with your actual domain name!
 
 Enable the site:
 
